@@ -33,7 +33,6 @@ int AddStateTransition(int fromState, int triggerEvent, int toState){ //Add to t
 		statetable[statetableline][0]=fromState;
 		statetable[statetableline][1]=triggerEvent;
 		statetable[statetableline][2]=toState;
-		printf("Insert %iº state  %i %i %i \n",statetableline+1, statetable[statetableline][0], statetable[statetableline][1], statetable[statetableline][2]);
 		statetableline++;
 		return(1);
 	}

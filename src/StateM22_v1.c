@@ -43,7 +43,8 @@ int main(void) {
 		printf("**  1 = OPENED -> CLOSED  **\n");
 		printf("**  2 = CURRENT STATE     **\n");
 		printf("**  3 = PRINT HISTORIC    **\n");
-		printf("**  4 = QUIT PROGRAM      **\n");
+		printf("**  4 = PRINT STATE TABLE **\n");
+		printf("**  5 = QUIT PROGRAM      **\n");
 		printf("**                        **\n");
 		printf("****************************\n");
 		printf("\n");
@@ -68,10 +69,16 @@ int main(void) {
 			}
 			break;
 		case 4:
+			printf("State Table is:\n");
+			for(int i=0; i<=statetableline-1;i++){
+				printf("%i %i %i\n" ,statetable[i][0], statetable[i][1], statetable[i][2]);
+			}
+			break;
+		case 5:
 			printf("The program is closed!!!");
 			return EXIT_SUCCESS;
 		default:
-			printf("Wrong option, please see again!!!");
+			printf("Wrong option, please see again!!!\n");
 			break;
 		}
 	}
