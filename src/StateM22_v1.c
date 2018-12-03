@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int mathistoric[100][3];
+int mathistoricline=0;
+
 enum states {  //Take into account the following values: CLOSED=0 e OPENED=1
 	CLOSED,
 	OPENED,
@@ -21,12 +24,21 @@ enum events {  //Take into account the following values: CLOSED_OPENED=0 e OPENE
 	OPENED_CLOSED,
 }triggerEvent;
 
+void historic(int prevState, int actEvent,int nextState){
+	mathistoric[mathistoricline][0]=prevState;
+	mathistoric[mathistoricline][1]=actEvent;
+	mathistoric[mathistoricline][2]=nextState;
+	printf("historic %i %i %i %i\n" ,mathistoric[mathistoricline][0], mathistoric[mathistoricline][1], mathistoric[mathistoricline][2], mathistoricline);
+	mathistoricline++;
+}
+
 int ProcessEvent(int triggerEvent){
 	switch(state){
 	case CLOSED:
 		switch(triggerEvent){
 		case CLOSED_OPENED:
 			state=OPENED;
+			historic(CLOSED, CLOSED_OPENED, OPENED);
 			return(1);
 		case OPENED_CLOSED:
 			printf("The state is already closed!!!");
@@ -40,6 +52,7 @@ int ProcessEvent(int triggerEvent){
 		switch(triggerEvent){
 		case OPENED_CLOSED:
 			state=CLOSED;
+			historic(OPENED, OPENED_CLOSED, CLOSED);
 			return(1);
 		case CLOSED_OPENED:
 			printf("The state is already opened!!!");
