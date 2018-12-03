@@ -13,8 +13,10 @@
 #include "StateM22_v1.h"
 
 int mathistoric[100][3]; // initialization of mathistoric table
+int mathistoricline=0; // initialization of mathistoricline  to zero
+int statetable[2][3]; // Declaration of statetable
+int statetableline=0; // initialization of mathistoricline  to zero
 
-int statetable[2][3]; // initialization of statetable
 
 
 enum states; // enumeration of states, is a data type that consists of integral constants, order the constant by sequence of record, as 0,1,2...
@@ -84,4 +86,62 @@ int main(void) { //Function main is the first to be one were the program executi
 		}
 	}
 	return EXIT_SUCCESS;
+}
+
+int AddStateTransition(int fromState, int triggerEvent, int toState){ //Add to the table (statetable), each  possible changes
+	while (statetableline<2){ //must be below 2 because we've only two possible transition states
+		statetable[statetableline][0]=fromState;
+		statetable[statetableline][1]=triggerEvent;
+		statetable[statetableline][2]=toState;
+		statetableline++;
+		return(1);
+	}
+	return(0);
+}
+
+void historic(int prevState, int actEvent,int nextState){ //record the table historic transitions
+	mathistoric[mathistoricline][0]=prevState;
+	mathistoric[mathistoricline][1]=actEvent;
+	mathistoric[mathistoricline][2]=nextState;
+	mathistoricline++;
+}
+
+void PrintStateMachine(){  // print the current state of machine
+		printf("Actual State Machine %i\n",mathistoric[mathistoricline-1][2]);
+}
+
+int ProcessEvent(int triggerEvent){ //according to the event the program chance to the correct state
+	switch(state){
+	case CLOSED:
+		switch(triggerEvent){
+		case CLOSED_OPENED:
+			state=OPENED;
+			historic(CLOSED, CLOSED_OPENED, OPENED);
+			printf("Opened with success!!!\n");
+			return(1);
+		case OPENED_CLOSED:
+			printf("The state is already closed!!!\n");
+			return(0);
+		default:
+			exit(1);
+			break;
+		}
+	break;
+	case OPENED:
+		switch(triggerEvent){
+		case OPENED_CLOSED:
+			state=CLOSED;
+			historic(OPENED, OPENED_CLOSED, CLOSED);
+			printf("Closed with success!!!\n");
+			return(1);
+		case CLOSED_OPENED:
+			printf("The state is already opened!!!\n");
+			return(0);
+		default:
+			exit(1);
+			break;
+		}
+	break;
+	}
+return(0);
 }
