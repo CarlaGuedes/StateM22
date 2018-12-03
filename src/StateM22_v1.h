@@ -9,13 +9,10 @@
 #define STATEM22_v1_H_
 
 
-#include <stdio.h>
-#include <stdlib.h>
-
-int mathistoric[100][3]; // initialization of mathistoric table
-int mathistoricline=0;
-int statetable[2][3]; // initialization of statetable
-int statetableline=0;
+int mathistoric[100][3]; // Declaration of mathistoric table
+int mathistoricline=0; // initialization of mathistoricline  to zero
+int statetable[2][3]; // Declaration of statetable
+int statetableline=0; // initialization of mathistoricline  to zero
 
 enum states {  //Take into account the following values: CLOSED=0 e OPENED=1
 	CLOSED,

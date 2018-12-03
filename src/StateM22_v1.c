@@ -17,8 +17,8 @@ int mathistoric[100][3]; // initialization of mathistoric table
 int statetable[2][3]; // initialization of statetable
 
 
-enum states;
-enum events;
+enum states; // enumeration of states, is a data type that consists of integral constants, order the constant by sequence of record, as 0,1,2...
+enum events; // enumeration of events, is a data type that consists of integral constants, order the constant by sequence of record, as 0,1,2...
 
 int AddStateTransition(int fromState, int triggerEvent, int toState);
 
@@ -28,14 +28,15 @@ void PrintStateMachine();
 
 int ProcessEvent(int triggerEvent);
 
-int main(void) {
-	int event;
+int main(void) { //Function main is the first to be one were the program execution always start from.
+				 //int and void are the return type. Void means it will not return any value.
+	int event; // Calling for the methods AddStateTransition and historic
 	state=OPENED;
 	AddStateTransition(CLOSED, CLOSED_OPENED, OPENED);
 	AddStateTransition(OPENED, OPENED_CLOSED, CLOSED);
 	historic(CLOSED, CLOSED_OPENED, OPENED);
 
-	while(mathistoricline<100){
+	while(mathistoricline<100){ //while mathistoricline is below 100 (maximum allowed line),from mathistoric table, the program keep a state transition record.
 		printf("\n");
 		printf("****************************\n");
 		printf("**                        **\n");
@@ -52,7 +53,7 @@ int main(void) {
 		fflush(stdout);
 		scanf("%i",&event);
 		printf("\n");
-		switch(event){
+		switch(event){ //for the selected option, it's called the respective method for each case.
 		case 0:
 			ProcessEvent(event);
 			break;
