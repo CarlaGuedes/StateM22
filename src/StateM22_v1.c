@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : StateM.c
+ Name        : StateM22_v1.c
  Author      : Carla Silva
  Version     :
  Copyright   : Your copyright notice
@@ -10,97 +10,70 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "StateM22_v1.h"
 
 int mathistoric[100][3]; // initialization of mathistoric table
-int mathistoricline=0;
+
 int statetable[2][3]; // initialization of statetable
-int statetableline=0;
-
-enum states {  //Take into account the following values: CLOSED=0 e OPENED=1
-	CLOSED,
-	OPENED,
-}state;
-
-enum events {  //Take into account the following values: CLOSED_OPENED=0 e OPENED_CLOSED=1
-	CLOSED_OPENED,
-	OPENED_CLOSED,
-}triggerEvent;
 
 
-int AddStateTransition(int fromState, int triggerEvent, int toState){ //Add to the table (statetable), each  possible changes
-	while (statetableline<2){ //must be below 2 because we've only two possible transition states
-		statetable[statetableline][0]=fromState;
-		statetable[statetableline][1]=triggerEvent;
-		statetable[statetableline][2]=toState;
-		printf("AddStateTransition %i %i %i %i\n",statetable[statetableline][0], statetable[statetableline][1], statetable[statetableline][2], statetableline);
-		statetableline++;
-		return(1);
-	}
-	return(0);
-}
+enum states;
+enum events;
 
+int AddStateTransition(int fromState, int triggerEvent, int toState);
 
-void historic(int prevState, int actEvent,int nextState){ //record the table historic transitions
-	mathistoric[mathistoricline][0]=prevState;
-	mathistoric[mathistoricline][1]=actEvent;
-	mathistoric[mathistoricline][2]=nextState;
-	printf("historic %i %i %i %i\n" ,mathistoric[mathistoricline][0], mathistoric[mathistoricline][1], mathistoric[mathistoricline][2], mathistoricline);
-	mathistoricline++;
-}
+void historic(int prevState, int actEvent,int nextState);
 
+void PrintStateMachine();
 
-
-void PrintStateMachine(){  // print the current state of machine
-		printf("PrintStateMachine %i\n",mathistoric[mathistoricline-1][2]);
-}
-
-
-int ProcessEvent(int triggerEvent){ //according to the event the program chance to the correct state
-	switch(state){
-	case CLOSED:
-		switch(triggerEvent){
-		case CLOSED_OPENED:
-			state=OPENED;
-			historic(CLOSED, CLOSED_OPENED, OPENED);
-			return(1);
-		case OPENED_CLOSED:
-			printf("The state is already closed!!!");
-			return(0);
-		default:
-			exit(1);
-			break;
-		}
-	break;
-	case OPENED:
-		switch(triggerEvent){
-		case OPENED_CLOSED:
-			state=CLOSED;
-			historic(OPENED, OPENED_CLOSED, CLOSED);
-			return(1);
-		case CLOSED_OPENED:
-			printf("The state is already opened!!!");
-			return(0);
-		default:
-			exit(1);
-			break;
-		}
-	break;
-	}
-return(0);
-}
-
+int ProcessEvent(int triggerEvent);
 
 int main(void) {
+	int event;
 	state=OPENED;
-	//int i = ProcessEvent(OPENED_CLOSED);
-	int a = AddStateTransition(CLOSED, CLOSED_OPENED, OPENED);
-	int b = AddStateTransition(OPENED, OPENED_CLOSED, CLOSED);
-	int c = AddStateTransition(CLOSED, OPENED_CLOSED, OPENED);
-	int d = AddStateTransition(OPENED_CLOSED, OPENED_CLOSED, OPENED);
-	PrintStateMachine();
-	//printf("texto\n");
-	//printf("texto %i\n",i);
-	//printf("texto %i\n" , ProcessEvent(CLOSED_OPENED));
-	printf("estado %i %i %i %i\n",a,b,c,d);
+	AddStateTransition(CLOSED, CLOSED_OPENED, OPENED);
+	AddStateTransition(OPENED, OPENED_CLOSED, CLOSED);
+	historic(CLOSED, CLOSED_OPENED, OPENED);
+
+	while(mathistoricline<100){
+		printf("\n");
+		printf("****************************\n");
+		printf("**                        **\n");
+		printf("**  0 = CLOSED -> OPENED  **\n");
+		printf("**  1 = OPENED -> CLOSED  **\n");
+		printf("**  2 = CURRENT STATE     **\n");
+		printf("**  3 = PRINT HISTORIC    **\n");
+		printf("**  4 = QUIT PROGRAM      **\n");
+		printf("**                        **\n");
+		printf("****************************\n");
+		printf("\n");
+		printf("Please insert option:");
+		fflush(stdout);
+		scanf("%i",&event);
+		printf("\n");
+		switch(event){
+		case 0:
+			ProcessEvent(event);
+			break;
+		case 1:
+			ProcessEvent(event);
+			break;
+		case 2:
+			PrintStateMachine();
+			break;
+		case 3:
+			printf("Table transition historic is:\n");
+			for(int i=0; i<=mathistoricline-1;i++){
+				printf("%i %i %i\n" ,mathistoric[i][0], mathistoric[i][1], mathistoric[i][2]);
+			}
+			break;
+		case 4:
+			printf("The program is closed!!!");
+			return EXIT_SUCCESS;
+		default:
+			printf("Wrong option, please see again!!!");
+			break;
+		}
+	}
 	return EXIT_SUCCESS;
 }
